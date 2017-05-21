@@ -1,5 +1,5 @@
 # RHT Consulting Playbooks
-- src: rhtconsulting.jboss_common
+- src: https://github.com/rhtconsulting/ansible-role-jboss-common
   name: jboss_common
   path: ./roles
 
