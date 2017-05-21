@@ -1,0 +1,22 @@
+---
+jboss_amq_artifact_source: https://access.redhat.com/jbossnetwork/restricted/softwareDownload.html?softwareId=51061
+jboss_amq_artifact_name: jboss-amq-7.0.0.redhat-1-bin.zip
+
+jboss_amq_user: amq-broker
+jboss_amq_install_base: /opt/redhat/amq-broker
+
+jboss_amq_install_home: /opt/redhat/amq-broker/jboss-amq-7.0.0.redhat-1
+
+jboss_amq_broker_home: /var/opt/amq-broker
+
+amq_brokers:
+  - name: default
+    user: admin
+    password: admin
+
+install_broker: true
+install_interconnect: false
+
+
+# ussually this is set at the playbook level
+#transfer_method: # csp-to-host | copy-from-contoller | url

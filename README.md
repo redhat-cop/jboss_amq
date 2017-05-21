@@ -30,4 +30,4 @@ License
 Authors Information
 ------------------
 
-* [Andrew Block] (https://github.com/sabre1041)
+* [Andrew Block](https://github.com/sabre1041)

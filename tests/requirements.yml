@@ -1,0 +1,14 @@
+# RHT Consulting Playbooks
+- src: rhtconsulting.jboss_common
+  name: jboss_common
+  path: ./roles
+
+# RHT CSP Download
+- src: sabre1041.redhat-csp-download
+  name: redhat-csp-download
+  path: ./roles
+
+# provision_docker
+- src: chrismeyersfsu.provision_docker
+  name: provision_docker
+  path: ./roles
