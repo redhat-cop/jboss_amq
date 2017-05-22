@@ -1,0 +1,19 @@
+---
+- name: Enable AMQ Interconnect Repos
+  command: "subscription-manager repos --enable {{ item }}"
+  with_items:
+  - amq-interconnect-1-for-rhel-7-server-rpms
+  - a-mq-clients-1-for-rhel-7-server-rpms
+
+- name: Install Interconnect Packages
+  action: "{{ ansible_pkg_mgr }} name={{ item }} state=latest"
+  with_items:
+  - "qpid-proton-c"
+  - "python-qpid-proton"
+  - "qpid-dispatch-router"
+  - "qpid-dispatch-tools"
+
+- name: Start Service
+  service:
+    name: qdrouterd.service
+    state: started
