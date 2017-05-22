@@ -1,0 +1,11 @@
+---
+- name: debug
+  debug:
+    var: install_broker
+- name: Install Broker
+  include: broker.yml
+  when: install_broker == true
+
+- name: Install Interconnect
+  include: interconnect.yml
+  when: install_interconnect == true
