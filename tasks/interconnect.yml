@@ -15,3 +15,4 @@
       - "python-qpid-proton"
       - "qpid-dispatch-router"
       - "qpid-dispatch-tools"
+    notify: Start Service
