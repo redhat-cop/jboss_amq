@@ -3,14 +3,14 @@
   - name: Enable AMQ Interconnect Repos
     rhsm_repository:
       name: "{{ item }}"
-    loop:
+    with_items:
       - amq-interconnect-1-for-rhel-7-server-rpms
       - a-mq-clients-1-for-rhel-7-server-rpms
 
   - name: Install Interconnect Packages
     yum:
       name: "{{ item }}"
-    loop:
+    with_items:
       - "qpid-proton-c"
       - "python-qpid-proton"
       - "qpid-dispatch-router"
