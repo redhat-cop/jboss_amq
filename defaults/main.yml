@@ -1,4 +1,99 @@
 ---
+# Fundamentals
+amq_version: 7.1.0
+amq_distribution: "/mnt/downloads/rh/amq/amq-broker-{{ amq_version }}-bin.zip"
+amq_root_dir: /opt/jboss/amq
+amq_install_dir: "{{ amq_root_dir }}/install/amq-broker-{{ amq_version }}"
+amq_broker_dir: "{{ amq_root_dir }}/brokers"
+amq_user: jboss
+amq_group: jboss
+amq_broker_name: broker
+amq_broker_data_dir: data
+
+# Primary admin user and role with which the broker is created
+amq_broker_admin:
+  name: amq
+  password: redhat
+  role: admins
+
+# Messaging users
+amq_broker_users:
+  - name: jboss
+    password: jboss
+    role: users
+
+# Messaging roles
+# each item of .permissions can be one of:
+#   - createNonDurableQueue
+#   - deleteNonDurableQueue
+#   - createDurableQueue
+#   - deleteDurableQueue
+#   - createAddress
+#   - deleteAddress
+#   - consume
+#   - browse
+#   - send
+#   - manage
+amq_broker_roles:
+  - name: users
+    permissions:
+      - browse
+      - consume
+      - send
+
+# Clustering
+amq_broker_clustered: False
+amq_broker_cluster_user: amq
+amq_broker_cluster_password: amq
+amq_broker_cluster_maxhops: 0
+amq_broker_cluster_load_balancing_policy: ON_DEMAND
+amq_broker_cluster_discovery: False
+amq_broker_slave: False
+amq_broker_replicated: False
+amq_broker_shared_storage: False
+
+# Queues
+amq_broker_disable_destination_autocreate: True
+amq_broker_queues: queue.in,queue.out
+
+# TLS
+amq_broker_tls: False
+amq_broker_tls_keystore: 
+amq_broker_tls_keystore_password: 
+amq_broker_tls_keystore_dest: "{{ amq_broker_dir }}/{{ amq_broker_name }}/etc/identity.ks"
+
+# Mutual authentication (requres TLS)
+amq_broker_tls_mutual_authentication: False
+amq_broker_tls_truststore: 
+amq_broker_tls_truststore_password: 
+amq_broker_tls_truststore_dest: "{{ amq_broker_dir }}/{{ amq_broker_name }}/etc/trust.ks"
+
+# Protocol disablement
+amq_broker_disable_amqp_protocol: False
+amq_broker_disable_hornetq_protocol: False
+amq_broker_disable_mqtt_protocol: False
+amq_broker_disable_stomp_protocol: False
+
+# Port assignments
+amq_broker_ports:
+  artemis:
+    port: 61616
+  amqp:
+    port: 5672
+  stomp:
+    port: 61613
+  hornetq:
+    port: 5445
+  mqtt:
+    port: 1833
+
+# System service
+amq_service: jboss-amq.service.j2
+amq_service_dest: /usr/lib/systemd/system/jboss-amq.service
+
+##########
+# To be integrated
+##########
 jboss_amq_artifact_source: https://access.redhat.com/jbossnetwork/restricted/softwareDownload.html?softwareId=51061
 jboss_amq_artifact_name: jboss-amq-7.0.0.redhat-1-bin.zip
 

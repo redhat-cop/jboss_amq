@@ -1,0 +1,64 @@
+---
+- name: configure - tls - copy keystore
+  copy:
+    src: "{{ amq_broker_tls_keystore }}"
+    dest: "{{ amq_broker_tls_keystore_dest }}"
+    mode: 0644
+  when: amq_broker_tls_keystore != ""
+
+- name: configure - tls - copy truststore
+  copy:
+    src: "{{ amq_broker_tls_truststore }}"
+    dest: "{{ amq_broker_tls_truststore_dest }}"
+    mode: 0644
+  when: amq_broker_tls_truststore != ""
+
+- name: configure - tls - retrieve artemis acceptor for messaging TLS enablement
+  xml:
+    path: "{{ amq_broker_dir }}/{{ amq_broker_name }}/etc/broker.xml"
+    xpath: /conf:configuration/core:core/core:acceptors/core:acceptor[@name = "artemis"]
+    content: text
+    namespaces:
+      conf: urn:activemq
+      core: urn:activemq:core
+  register: artemis_acceptor
+  when: amq_broker_tls_keystore != ""
+
+- name: configure - tls - extract artemis acceptor for messaging TLS enablment
+  set_fact:
+    artemis_acceptor: "{{ artemis_acceptor | json_query('matches[*].*') | json_query('[]') | join }}"
+  when: amq_broker_tls_keystore != ""
+
+- name: configure - tls - parse artemis acceptor URL for messaging TLS enablement
+  set_fact:
+    artemis_acceptor: "{{ artemis_acceptor | urlsplit | urlsplit_splitquery }}"
+  when: amq_broker_tls_keystore != ""
+
+- name: configure - tls - define messaginge TLS configuration
+  set_fact:
+    tls_configuration:
+      query:
+        sslEnabled: "{{ amq_broker_tls }}"
+        keyStorePath: "{{ amq_broker_tls_keystore_dest }}"
+        keyStorePassword: "{{ amq_broker_tls_keystore_password }}"
+  when: amq_broker_tls_keystore != ""
+
+- name: configure - tls - incorporate messaging TLS configuration
+  set_fact:
+    artemis_acceptor: "{{ artemis_acceptor | combine(tls_configuration, recursive=True) }}"
+  when: amq_broker_tls_keystore != ""
+
+- name: configure - tls - update artemis acceptor URL for messaging TLS enablement
+  set_fact:
+    artemis_acceptor: "{{ artemis_acceptor | urlcombine }}"
+  when: amq_broker_tls_keystore != ""
+
+- name: configure - tls - apply messaging TLS enablement
+  xml:
+    path: "{{ amq_broker_dir }}/{{ amq_broker_name }}/etc/broker.xml"
+    xpath: /conf:configuration/core:core/core:acceptors/core:acceptor[@name = "artemis"]
+    value: "{{ artemis_acceptor }}"
+    namespaces:
+      conf: urn:activemq
+      core: urn:activemq:core
+  when: amq_broker_tls_keystore != ""
