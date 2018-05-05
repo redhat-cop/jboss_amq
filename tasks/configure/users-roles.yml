@@ -1,0 +1,22 @@
+---
+- name: configure - users-roles - create additional messaging users
+  shell: >
+    {{ amq_broker_dir }}/{{ amq_broker_name }}/bin/artemis user add
+    --user {{ item.name }}
+    --password {{ item.password }}
+    --role {{ item.role }}
+  with_items:
+    - "{{ amq_broker_users }}"
+
+- name: configure - users-roles - add messaging roles permissions
+  xml:
+    path: "{{ amq_broker_dir }}/{{ amq_broker_name }}/etc/broker.xml"
+    xpath: /conf:configuration/core:core/core:security-settings
+    input_type: xml
+    add_children: "{{ lookup('template', 'messaging-security-setting.xml.j2') }}"
+    namespaces:
+      conf: urn:activemq
+      core: urn:activemq:core
+    pretty_print: yes
+  with_items:
+    - "{{ amq_broker_roles }}"
