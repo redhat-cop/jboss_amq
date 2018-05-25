@@ -12,6 +12,7 @@ This role supports a few different mechanism for transferring the product zip fi
 Dependencies
 ------------
 
+- ansible 2.5
 - java
 - unzip
 
