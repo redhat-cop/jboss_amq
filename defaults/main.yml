@@ -1,4 +1,5 @@
 ---
+
 jboss_amq_artifact_source: https://access.redhat.com/jbossnetwork/restricted/softwareDownload.html?softwareId=51061
 jboss_amq_artifact_name: jboss-amq-7.0.0.redhat-1-bin.zip
 

@@ -1,11 +1,13 @@
 ---
-- name: debug
-  debug:
-    var: install_broker
-- name: Install Broker
-  include: broker.yml
-  when: install_broker == true
 
-- name: Install Interconnect
-  include: interconnect.yml
-  when: install_interconnect == true
+  - name: debug
+    debug:
+      var: install_broker
+
+  - name: Install Broker
+    include_tasks: broker.yml
+    when: install_broker == true
+
+  - name: Install Interconnect
+    include_tasks: interconnect.yml
+    when: install_interconnect == true
