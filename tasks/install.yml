@@ -1,0 +1,36 @@
+---
+- name: install - create AMQ platform group
+  group:
+    name: "{{ amq_group }}"
+    state: present
+  become_user: root
+
+- name: install - create AMQ platform user
+  user:
+    name: "{{ amq_user }}"
+    group: "{{ amq_group }}"
+    state: present
+  become_user: root
+
+- name: install - ensure AMQ install directory exists
+  file:
+    path: "{{ amq_install_dir | dirname }}"
+    state: directory
+    owner: "{{ amq_user }}"
+    group: "{{ amq_group }}"
+  become_user: root
+
+- name: install - install AMQ
+  unarchive:
+    src: "{{ amq_distribution }}"
+    dest: "{{ amq_install_dir | dirname }}"
+    owner: "{{ amq_user }}"
+    group: "{{ amq_group }}"
+    creates: "{{ amq_install_dir }}"
+
+- name: install - install packages
+  yum:
+    name: "{{ item }}"
+    state: latest
+  with_items:
+    - libaio

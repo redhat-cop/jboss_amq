@@ -32,4 +32,5 @@ Authors Information
 ------------------
 
 * [Andrew Block](https://github.com/sabre1041)
+* [Christian Polizzi](https://github.com/cpolizzi)
 * [Jonathan Lozada De La Matta](https://github.com/jlozadad)

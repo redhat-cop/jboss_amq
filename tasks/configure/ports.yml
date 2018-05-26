@@ -1,0 +1,61 @@
+---
+- name: configure - ports - acceptors - retrieve existing acceptor names
+  xml:
+    path: "{{ amq_broker_dir }}/{{ amq_broker_name }}/etc/broker.xml"
+    xpath: /conf:configuration/core:core/core:acceptors/core:acceptor
+    attribute: name
+    content: attribute
+    namespaces:
+      conf: urn:activemq
+      core: urn:activemq:core
+  register: acceptor_names
+
+- name: configure - ports - acceptors - extract names as list
+  set_fact:
+    acceptor_names: "{{ acceptor_names | json_query('matches[*].*') | json_query('[]') }}"
+
+- name: configure - ports - ports - acceptors - retrieve existing acceptor URL's
+  xml:
+    path: "{{ amq_broker_dir }}/{{ amq_broker_name }}/etc/broker.xml"
+    xpath: /conf:configuration/core:core/core:acceptors/core:acceptor
+    content: text
+    namespaces:
+      conf: urn:activemq
+      core: urn:activemq:core
+  register: acceptors_urls
+
+- name: configure - ports - acceptors - extract acceptor URL's as list
+  set_fact:
+    acceptor_urls: "{{ acceptors_urls | json_query('matches[*].*') | json_query('[]') }}"
+
+- name: configure - ports - acceptors - parse URL's
+  set_fact:
+    acceptor_parsed_urls: >
+      {{ acceptor_parsed_urls | default( [] ) + [
+        item | urlsplit | urlsplit_splitquery
+      ] }}
+  with_items:
+    - "{{ acceptor_urls }}"
+
+- name: configure - ports - acceptors - combine
+  set_fact:
+    acceptors: >
+      {{ acceptors | default( {} ) | combine({item.0.name : item.1}) }}
+  with_together:
+    - "{{ acceptor_names }}"
+    - "{{ acceptor_parsed_urls }}"
+
+- name: configure - ports - acceptors - configure ports
+  set_fact:
+    acceptors: "{{ acceptors | combine(amq_broker_ports, recursive=True) }}"
+
+- name: configure - ports - acceptors - update acceptors for ports
+  xml:
+    path: "{{ amq_broker_dir }}/{{ amq_broker_name }}/etc/broker.xml"
+    xpath: /conf:configuration/core:core/core:acceptors/core:acceptor[@name = "{{ item.name }}"]
+    value: "{{ acceptors[ item.name ] | urlcombine }}"
+    namespaces:
+      conf: urn:activemq
+      core: urn:activemq:core
+  with_items:
+    - "{{ acceptor_names }}"
