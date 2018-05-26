@@ -1,0 +1,118 @@
+---
+- name: configure - clustering - ensure shared storage directory exists
+  file:
+    path: "{{ amq_broker_data_dir }}"
+    owner: "{{ amq_user }}"
+    group: "{{ amq_group }}"
+    state: directory
+  when: amq_broker_shared_storage
+  become_user: root
+
+- name: configure - clustering - retrieve existing static connectors
+  xml:
+    path: "{{ amq_broker_dir }}/{{ amq_broker_name }}/etc/broker.xml"
+    xpath: /conf:configuration/core:core/core:connectors/core:connector
+    content: text
+    namespaces:
+      conf: urn:activemq
+      core: urn:activemq:core
+  register: connectors
+
+- name: configure - clustering - extract connector values as list
+  set_fact:
+    connectors: "{{ connectors | json_query('matches[*].*') | json_query('[]') }}"
+
+- name: configure - clustering - add static connectors
+  xml:
+    path: "{{ amq_broker_dir }}/{{ amq_broker_name }}/etc/broker.xml"
+    xpath: /conf:configuration/core:core/core:connectors
+    add_children:
+      - connector:
+          name: "{{ item.name }}"
+    namespaces:
+      conf: urn:activemq
+      core: urn:activemq:core
+    pretty_print: yes
+  with_items:
+    - "{{ amq_broker_cluster_nodes }}"
+  when: not amq_broker_cluster_discovery and not item.value | search(ansible_host) and not item.value in connectors
+
+- name: configure - clustering - configure static connectors
+  xml:
+    path: "{{ amq_broker_dir }}/{{ amq_broker_name }}/etc/broker.xml"
+    xpath: "/conf:configuration/core:core/core:connectors/core:connector[@name='{{ item.name }}']"
+    value: "{{ item.value }}"
+    namespaces:
+      conf: urn:activemq
+      core: urn:activemq:core
+    pretty_print: yes
+  with_items:
+    - "{{ amq_broker_cluster_nodes }}"
+  when: not amq_broker_cluster_discovery and not item.value | search(ansible_host)
+
+- name: configure - clustering - remove all static cluster reference connectors
+  xml:
+    path: "{{ amq_broker_dir }}/{{ amq_broker_name }}/etc/broker.xml"
+    xpath: /conf:configuration/core:core/core:cluster-connections/core:cluster-connection/core:static-connectors
+    state: absent
+    namespaces:
+      conf: urn:activemq
+      core: urn:activemq:core
+    pretty_print: yes
+  when: not amq_broker_cluster_discovery
+
+- name: configure - clustering - add static cluster reference connector
+  xml:
+    path: "{{ amq_broker_dir }}/{{ amq_broker_name }}/etc/broker.xml"
+    xpath: /conf:configuration/core:core/core:cluster-connections/core:cluster-connection
+    add_children:
+      - static-connectors:
+    namespaces:
+      conf: urn:activemq
+      core: urn:activemq:core
+    pretty_print: yes
+  when: not amq_broker_cluster_discovery
+
+- name: configure - clustering - configure static cluster reference connectors
+  xml:
+    path: "{{ amq_broker_dir }}/{{ amq_broker_name }}/etc/broker.xml"
+    xpath: /conf:configuration/core:core/core:cluster-connections/core:cluster-connection/core:static-connectors
+    add_children:
+      - connector-ref: "{{ item.name }}"
+    namespaces:
+      conf: urn:activemq
+      core: urn:activemq:core
+    pretty_print: yes
+  with_items:
+    - "{{ amq_broker_cluster_nodes }}"
+  when: not amq_broker_cluster_discovery and not item.value | search(ansible_host)
+
+- name: configure - clustering - remove cluster connection discovery group reference
+  xml:
+    path: "{{ amq_broker_dir }}/{{ amq_broker_name }}/etc/broker.xml"
+    xpath: /conf:configuration/core:core/core:cluster-connections/core:cluster-connection/core:discovery-group-ref
+    state: absent
+    namespaces:
+      conf: urn:activemq
+      core: urn:activemq:core
+  when: not amq_broker_cluster_discovery
+
+- name: configure - clustering - remove broadcast groups
+  xml:
+    path: "{{ amq_broker_dir }}/{{ amq_broker_name }}/etc/broker.xml"
+    xpath: /conf:configuration/core:core/core:broadcast-groups
+    state: absent
+    namespaces:
+      conf: urn:activemq
+      core: urn:activemq:core
+  when: not amq_broker_cluster_discovery
+
+- name: configure - clustering - remove discovery groups
+  xml:
+    path: "{{ amq_broker_dir }}/{{ amq_broker_name }}/etc/broker.xml"
+    xpath: /conf:configuration/core:core/core:discovery-groups
+    state: absent
+    namespaces:
+      conf: urn:activemq
+      core: urn:activemq:core
+  when: not amq_broker_cluster_discovery

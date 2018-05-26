@@ -1,0 +1,149 @@
+---
+- name: configure - create-broker - build broker cluster node members
+  set_fact:
+    amq_broker_cluster_nodes: >
+      {{ amq_broker_cluster_nodes | default( [] ) + [
+        {
+          "name": hostvars[item].amq_broker_name,
+          "address": item,
+          "inventory_host": item,
+          "value": "tcp://" + item + ":61616"
+        }
+      ] }}
+  with_items: "{{ ansible_play_batch }}"
+
+- name: configure - create-broker - prepare broker creation options
+  set_fact:
+    amq_broker_options:
+      - "--name {{ amq_broker_name }}"
+      - "--role {{ amq_broker_admin.role }}"
+
+- name: configure - create-broker - enable clustering
+  set_fact:
+    amq_broker_options:
+      - "{{ amq_broker_options | join(' ') }}"
+      - "--clustered"
+      - "--cluster-user {{ amq_broker_cluster_user }}"
+      - "--cluster-password {{ amq_broker_cluster_password }}"
+      - "--max-hops {{ amq_broker_cluster_maxhops }}"
+      - "--message-load-balancing {{ amq_broker_cluster_load_balancing_policy }}"
+      - "--failover-on-shutdown"
+  when: amq_broker_clustered
+
+- name: configure - create-broker - enable security
+  set_fact:
+    amq_broker_options:
+      - "{{ amq_broker_options | join(' ') }}"
+      - "--require-login"
+      - "--user {{ amq_broker_admin.name }}"
+      - "--password {{ amq_broker_admin.password }}"
+
+- name: configure - create-broker - set address broker accepts connections on
+  set_fact:
+    amq_broker_options:
+      - "{{ amq_broker_options | join(' ') }}"
+      - "--host {{ ansible_host }}"
+
+- name: configure - create-broker - set address embedded web server accepts connections on
+  set_fact:
+    amq_broker_options:
+      - "{{ amq_broker_options | join(' ') }}"
+      - "--http-host {{ ansible_host }}"
+
+- name: configure - create-broker - disable automatic creation of queues
+  set_fact:
+    amq_broker_options:
+      - "{{ amq_broker_options | join(' ') }}"
+      - "--no-autocreate"
+  when: amq_broker_disable_destination_autocreate
+
+- name: configure - create-broker - set up queues
+  set_fact:
+    amq_broker_options:
+      - "{{ amq_broker_options | join(' ') }}"
+      - "--queues {{ amq_broker_queues }}"
+
+- name: configure - create-broker - set up data directory
+  set_fact:
+    amq_broker_options:
+      - "{{ amq_broker_options | join(' ') }}"
+      - "--data {{ amq_broker_data_dir }}"
+
+- name: configure - create-broker - designate as slave
+  set_fact:
+    amq_broker_options:
+      - "{{ amq_broker_options | join(' ') }}"
+      - "--slave"
+  when: amq_broker_slave
+
+- name: configure - create-broker - enable replication
+  set_fact:
+    amq_broker_options:
+      - "{{ amq_broker_options | join(' ') }}"
+      - "--replicated"
+  when: amq_broker_replicated
+
+- name: configure - create-broker - enable shared storage
+  set_fact:
+    amq_broker_options:
+      - "{{ amq_broker_options | join(' ') }}"
+      - "--shared-store"
+  when: amq_broker_shared_storage
+
+- name: configure - create-broker - disable AMQP protocol
+  set_fact:
+    amq_broker_options:
+      - "{{ amq_broker_options | join(' ') }}"
+      - "--no-amqp-acceptor"
+  when: amq_broker_disable_amqp_protocol
+
+- name: configure - create-broker - disable HornetQ protocol
+  set_fact:
+    amq_broker_options:
+      - "{{ amq_broker_options | join(' ') }}"
+      - "--no-hornetq-acceptor"
+  when: amq_broker_disable_hornetq_protocol
+
+- name: configure - create-broker - disable MQTT protocol
+  set_fact:
+    amq_broker_options:
+      - "{{ amq_broker_options | join(' ') }}"
+      - "--no-mqtt-acceptor"
+  when: amq_broker_disable_mqtt_protocol
+
+- name: configure - create-broker - disable STOMP
+  set_fact:
+    amq_broker_options:
+      - "{{ amq_broker_options | join(' ') }}"
+      - "--no-stomp-acceptor"
+  when: amq_broker_disable_stomp_protocol
+
+- name: configure - create-broker - enable TLS for web UI
+  set_fact:
+    amq_broker_options:
+      - "{{ amq_broker_options | join(' ') }}"
+      - "--ssl-key {{ amq_broker_tls_keystore_dest }}"
+      - "--ssl-key-password {{ amq_broker_tls_keystore_password }}"
+  when: amq_broker_tls and amq_broker_tls_keystore and amq_broker_tls_keystore_password
+
+- name: configure - create-broker - enable TLS client authentication for web UI
+  set_fact:
+    amq_broker_options:
+      - "{{ amq_broker_options | join(' ') }}"
+      - "--ssl-trust {{ amq_broker_tls_truststore_dest }}"
+      - "--ssl-trust-password {{ amq_broker_tls_truststore_password }}"
+      - "--use-client-auth"
+  when: amq_broker_tls and amq_broker_tls_mutual_authentication and amq_broker_tls_truststore and amq_broker_tls_truststore_password
+
+# THIS SHOULD ALWAYS BE PERFORMED PRIOR TO CREATING THE BROKER
+- name: configure - create-broker - finalize broker creation options
+  set_fact:
+    amq_broker_options: "{{ amq_broker_options | join(' ') }}"
+
+- name: configure - create-broker - create broker
+  shell: >
+    {{ amq_install_dir }}/bin/artemis create {{ amq_broker_dir }}/{{ amq_broker_name }}
+    {{ amq_broker_options }}
+  args:
+    creates: "{{ amq_broker_dir }}/{{ amq_broker_name }}"
+  register: broker_created

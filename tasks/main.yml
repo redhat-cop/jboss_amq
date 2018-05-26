@@ -1,13 +1,18 @@
 ---
+- include: install.yml
+  tags: [ "jboss:amq:install" ]
+  become: yes
+  become_user: "{{ amq_user }}"
+  become_method: sudo
 
-  - name: debug
-    debug:
-      var: install_broker
+- include: patch.yml
+  tags: [ "jboss:amq:patch" ]
+  become: yes
+  become_user: "{{ amq_user }}"
+  become_method: sudo
 
-  - name: Install Broker
-    include_tasks: broker.yml
-    when: install_broker == true
-
-  - name: Install Interconnect
-    include_tasks: interconnect.yml
-    when: install_interconnect == true
+- include: configure.yml
+  tags: [ "jboss:amq:configure" ]
+  become: yes
+  become_user: "{{ amq_user }}"
+  become_method: sudo
