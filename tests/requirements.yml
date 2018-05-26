@@ -1,11 +1,11 @@
 # RHT Consulting Playbooks
-- src: https://github.com/rhtconsulting/ansible-role-jboss-common
-  name: jboss_common
+- src: redhat-cop.jboss-common
+  name: redhat-cop.jboss_common
   path: ./roles
 
 # RHT CSP Download
 - src: sabre1041.redhat-csp-download
-  name: redhat-csp-download
+  name: sabre1041.redhat-csp-download
   path: ./roles
 
 # provision_docker
