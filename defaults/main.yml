@@ -1,7 +1,9 @@
 ---
 # Fundamentals
 amq_version: 7.1.0
-amq_distribution: "/mnt/downloads/rh/amq/amq-broker-{{ amq_version }}-bin.zip"
+
+amq_distribution_dir: "/mnt/downloads/rh/amq/"
+amq_distribution: "{{ amq_distribution_dir }}/amq-broker-{{ amq_version }}-bin.zip"
 amq_root_dir: /opt/jboss/amq
 amq_install_dir: "{{ amq_root_dir }}/install/amq-broker-{{ amq_version }}"
 amq_broker_dir: "{{ amq_root_dir }}/brokers"

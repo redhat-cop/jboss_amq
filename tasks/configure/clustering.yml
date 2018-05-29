@@ -17,6 +17,8 @@
       conf: urn:activemq
       core: urn:activemq:core
   register: connectors
+  ignore_errors: yes
+
 
 - name: configure - clustering - extract connector values as list
   set_fact:

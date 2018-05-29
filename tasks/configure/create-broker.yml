@@ -12,6 +12,10 @@
       ] }}
   with_items: "{{ ansible_play_batch }}"
 
+- name: DEBUG configure - create-broker - build broker cluster node members
+  debug: var=amq_broker_cluster_nodes
+
+
 - name: configure - create-broker - prepare broker creation options
   set_fact:
     amq_broker_options:

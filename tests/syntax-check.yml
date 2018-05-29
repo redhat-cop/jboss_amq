@@ -1,4 +1,6 @@
 - hosts: jboss_amq_centos_hosts
-  gather_facts: false
+  gather_facts: true
+  become: True
   roles:
-   - jboss_amq
+   - { role: jboss-common, transfer_method: 'csp-to-host' }
+   - { role: jboss_amq, amq_distribution_dir: '/Users/hdaems/projects/consulting/amq-varia/vagrant/work/csp_repo' }
