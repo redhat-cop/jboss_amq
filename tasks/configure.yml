@@ -5,6 +5,7 @@
   when: amq_broker_tls
 
 - include: configure/clustering.yml
+  when: amq_broker_clustered
 
 - include: configure/ports.yml
 
