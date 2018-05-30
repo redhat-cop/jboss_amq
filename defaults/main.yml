@@ -42,6 +42,11 @@ amq_broker_roles:
       - browse
       - consume
       - send
+  - name: producers
+    permissions:
+      - browse
+      - send
+
 
 # Clustering
 amq_broker_clustered: False

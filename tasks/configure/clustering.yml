@@ -16,6 +16,7 @@
     namespaces:
       conf: urn:activemq
       core: urn:activemq:core
+  when: not amq_broker_cluster_discovery
   register: connectors
   ignore_errors: yes
 
