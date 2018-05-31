@@ -117,3 +117,25 @@
       conf: urn:activemq
       core: urn:activemq:core
   when: not amq_broker_cluster_discovery
+
+- name: configure - clustering - configure max hops
+  xml:
+    path: "{{ amq_broker_dir }}/{{ amq_broker_name }}/etc/broker.xml"
+    xpath: "/conf:configuration/core:core/core:cluster-connections/core:cluster-connection/core:max-hops"
+    value: "{{ amq_broker_cluster_maxhops }}"
+    namespaces:
+      conf: urn:activemq
+      core: urn:activemq:core
+    pretty_print: yes
+  when: amq_broker_clustered
+
+- name: configure - clustering - configure message load balancing policy
+  xml:
+    path: "{{ amq_broker_dir }}/{{ amq_broker_name }}/etc/broker.xml"
+    xpath: "/conf:configuration/core:core/core:cluster-connections/core:cluster-connection/core:message-load-balancing"
+    value: "{{ amq_broker_cluster_load_balancing_policy }}"
+    namespaces:
+      conf: urn:activemq
+      core: urn:activemq:core
+    pretty_print: yes
+  when: amq_broker_clustered
