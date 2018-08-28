@@ -1,15 +1,17 @@
 ---
 # Fundamentals
-amq_version: 7.1.0
+amq_version: 7.2.0
 jboss_amq_artifact_name: amq-broker-{{ amq_version }}-bin.zip
 amq_distribution: "/mnt/downloads/rh/amq/{{ jboss_amq_artifact_name }}"
-jboss_amq_artifact_source: https://access.redhat.com/jbossnetwork/restricted/softwareDownload.html?softwareId=56531
-amq_root_dir: /opt/jboss/amq
+jboss_amq_artifact_source: https://access.redhat.com/jbossnetwork/restricted/softwareDownload.html?softwareId=58991
+amq_root_dir: /opt/nlg/
+#amq_root_dir: /opt/jboss/amq
 amq_install_dir: "{{ amq_root_dir }}/install/amq-broker-{{ amq_version }}"
 amq_broker_dir: "{{ amq_root_dir }}/brokers"
 amq_user: jboss
 amq_group: jboss
-amq_broker_name: broker
+amq_broker-name: broker1
+#amq_broker_name: broker
 amq_broker_data_dir: data
 
 # Primary admin user and role with which the broker is created
@@ -52,11 +54,16 @@ amq_broker_cluster_load_balancing_policy: ON_DEMAND
 amq_broker_cluster_discovery: False
 amq_broker_slave: False
 amq_broker_replicated: False
+
+## Shared Storage
 amq_broker_shared_storage: False
 
 # Queues
 amq_broker_disable_destination_autocreate: True
 amq_broker_queues: queue.in,queue.out
+
+# Nio option
+amq_broker_nio: True
 
 # TLS
 amq_broker_tls: False
@@ -64,7 +71,10 @@ amq_broker_tls_keystore:
 amq_broker_tls_keystore_password: 
 amq_broker_tls_keystore_dest: "{{ amq_broker_dir }}/{{ amq_broker_name }}/etc/identity.ks"
 
-# Mutual authentication (requres TLS)
+# Patch AMQ
+amq_broker_patch: False
+
+# Mutual authentication (requires TLS)
 amq_broker_tls_mutual_authentication: False
 amq_broker_tls_truststore: 
 amq_broker_tls_truststore_password: 
