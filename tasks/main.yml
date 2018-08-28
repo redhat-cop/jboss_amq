@@ -1,17 +1,18 @@
 ---
-- include: install.yml
+- include_tasks: install.yml
   tags: [ "jboss:amq:install" ]
   become: yes
   become_user: "{{ amq_user }}"
   become_method: sudo
 
-- include: patch.yml
+- include_tasks: patch.yml
   tags: [ "jboss:amq:patch" ]
   become: yes
   become_user: "{{ amq_user }}"
   become_method: sudo
+  when: amq_broker_patch
 
-- include: configure.yml
+- include_tasks: configure.yml
   tags: [ "jboss:amq:configure" ]
   become: yes
   become_user: "{{ amq_user }}"

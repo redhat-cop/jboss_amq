@@ -111,6 +111,13 @@
       - "--no-mqtt-acceptor"
   when: amq_broker_disable_mqtt_protocol
 
+- name: configure - nio sets the journal as nio
+  set_fact:
+    amq_broker_options:
+    - "{{ amq_broker_options | join(' ') }}"
+    - "--nio"
+  when: amq_broker_nio
+
 - name: configure - create-broker - disable STOMP
   set_fact:
     amq_broker_options:

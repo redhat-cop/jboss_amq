@@ -1,14 +1,17 @@
 ---
-- include: configure/create-broker.yml
+- include_tasks: configure/create-broker.yml
 
-- include: configure/tls.yml
+- include_tasks: configure/tls.yml
   when: amq_broker_tls
 
-- include: configure/clustering.yml
+- include_tasks: configure/shared_storage.yml
+  when: amq_broker_shared_storage
+
+- include_tasks: configure/clustering.yml
   when: amq_broker_clustered
 
-- include: configure/ports.yml
+- include_tasks: configure/ports.yml
 
-- include: configure/users-roles.yml
+- include_tasks: configure/users-roles.yml
 
-- include: configure/service.yml
+- include_tasks: configure/service.yml

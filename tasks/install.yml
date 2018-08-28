@@ -1,5 +1,13 @@
 ---
 
+- name: install - install packages
+  yum:
+    name: "{{ item }}"
+    state: latest
+  with_items:
+    - libaio
+  become_user: root
+                    
 - name: Set AMQ Artifact Facts
   set_fact:
     jboss_amq_artifact_tmp_dest: "{{ '/tmp/' + jboss_amq_artifact_name }}"
@@ -72,11 +80,3 @@
     group: "{{ amq_group }}"
     creates: "{{ amq_install_dir }}"
     remote_src: "{{ amq_remote_src | default('no') }}"
-
-- name: install - install packages
-  yum:
-    name: "{{ item }}"
-    state: latest
-  with_items:
-    - libaio
-  become_user: root
