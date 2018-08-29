@@ -4,14 +4,12 @@ amq_version: 7.2.0
 jboss_amq_artifact_name: amq-broker-{{ amq_version }}-bin.zip
 amq_distribution: "/mnt/downloads/rh/amq/{{ jboss_amq_artifact_name }}"
 jboss_amq_artifact_source: https://access.redhat.com/jbossnetwork/restricted/softwareDownload.html?softwareId=58991
-amq_root_dir: /opt/nlg/
-#amq_root_dir: /opt/jboss/amq
+amq_root_dir: /opt/jboss/amq
 amq_install_dir: "{{ amq_root_dir }}/install/amq-broker-{{ amq_version }}"
 amq_broker_dir: "{{ amq_root_dir }}/brokers"
 amq_user: jboss
 amq_group: jboss
-amq_broker-name: broker1
-#amq_broker_name: broker
+amq_broker_name: broker
 amq_broker_data_dir: data
 
 # Primary admin user and role with which the broker is created
