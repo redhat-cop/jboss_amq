@@ -154,3 +154,5 @@
   args:
     creates: "{{ amq_broker_dir }}/{{ amq_broker_name }}"
   register: broker_created
+  become: True
+  become_user: jboss
