@@ -1,29 +1,5 @@
 ---
 
-- name: install - install packages
-  yum:
-    name: "{{ item }}"
-    state: latest
-  with_items:
-    - libaio
-  become_user: root
-                    
-- name: Set AMQ Artifact Facts
-  set_fact:
-    jboss_amq_artifact_tmp_dest: "{{ '/tmp/' + jboss_amq_artifact_name }}"
-
-- name: install - create AMQ platform group
-  group:
-    name: "{{ amq_group }}"
-    state: present
-  become_user: root
-
-- name: install - create AMQ platform user
-  user:
-    name: "{{ amq_user }}"
-    group: "{{ amq_group }}"
-    state: present
-  become_user: root
 
 - name: install - ensure AMQ install directory exists
   file:
@@ -38,43 +14,9 @@
     path: "{{ amq_install_dir }}"
   register: jboss_amq_exists
 
-- block:
-  - name: install - copy JBoss AMQ
-    copy:
-      src: "{{ jboss_amq_artifact_name }}"
-      dest: "{{ jboss_amq_artifact_tmp_dest }}"
-  - name: install - set Location for Copy of JBoss AMQ
-    set_fact:
-      amq_distribution: "{{ jboss_amq_artifact_tmp_dest }}"
-      amq_remote_src: yes
-  when: transfer_method == 'copy-from-controller' and jboss_amq_exists.stat.exists == false
-
-- block:
-  - name: Async Download JBoss AMQ from Red Hat Customer Portal
-    redhat_csp_download:
-      url: "{{ jboss_amq_artifact_source }}"
-      dest: "{{ jboss_amq_artifact_tmp_dest }}"
-      username: "{{ rhn_username }}"
-      password: "{{ rhn_password }}"
-    async: 7200
-    poll: 0
-    register: jboss_amq_download
-  - name: 'Check On JBoss AMQ Download Completion'
-    async_status: jid={{ jboss_amq_download.ansible_job_id }}
-    register: job_result3
-    until: job_result3.finished
-    retries: 600
-    delay: 10
-  - name: Set Location for Copy of JBoss AMQ
-    set_fact:
-      amq_distribution: "{{ jboss_amq_artifact_tmp_dest }}"
-      amq_remote_src: yes
-  when: transfer_method == 'csp-to-host' and jboss_amq_exists.stat.exists == false
-
-
 - name: install - install AMQ
   unarchive:
-    src: "{{ amq_distribution }}"
+    src: "{{ jboss_amq_artifact_name }}"
     dest: "{{ amq_install_dir | dirname }}"
     owner: "{{ amq_user }}"
     group: "{{ amq_group }}"
