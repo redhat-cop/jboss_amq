@@ -1,7 +1,7 @@
 ---
 # Fundamentals
 # usually this is set at the playbook level
-transfer_method:  copy-from-controller
+transfer_method:  copy-from-contoller
 amq_version: 7.2.0
 jboss_amq_artifact_name: amq-broker-{{ amq_version }}-bin.zip
 amq_distribution: "/mnt/downloads/rh/amq/{{ jboss_amq_artifact_name }}"
