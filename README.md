@@ -19,6 +19,18 @@ Dependencies
 
 Our playbooks provide these dependencies in a [common role](https://github.com/redhat-cop/ansible-middleware-playbooks/tree/master/roles/common), but this there is no explicitly ansible dependency to allow end users more options.
 
+Inventory
+---------
+
+This role requires the following vars in the inventory file
+
+```
+amq-host1    amq_broker_name=broker-master
+amq-host2    amq_broker_name=broker-backup1    amq_broker_slave=True
+amq-host3    amq_broker_name=broker-backup2    amq_broker_slave=True
+amq-host4    amq_broker_name=broker-backup3    amq_broker_slave=True
+```
+
 Example Playbooks
 ----------------
 
