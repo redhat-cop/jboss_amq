@@ -23,7 +23,7 @@ amq_broker_admin:
 # Messaging users
 amq_broker_users:
   - name: jboss
-    password: jboss
+    password: "jboss"
     role: users
 
 # Messaging roles
@@ -48,7 +48,7 @@ amq_broker_roles:
 # Clustering
 amq_broker_clustered: False
 amq_broker_cluster_user: amq
-amq_broker_cluster_password: amq
+amq_broker_cluster_password: "amq"
 amq_broker_cluster_maxhops: 0
 amq_broker_cluster_load_balancing_policy: ON_DEMAND
 amq_broker_cluster_discovery: False

@@ -17,8 +17,7 @@ Dependencies
 - unzip
 - jmespath
 
-Our playbooks provide these dependencies in a [common role](https://github.com/redhat-cop/ansible-middleware-playbooks/tree/master/roles/common), but this there is no explicitly ansible dependency to allow end users more options.
-
+Our playbooks provide these dependencies in a [common role](https://github.com/redhat-cop/ansible-middleware-playbooks/tree/master/roles/common), but this there is no explicitly ansible dependency to allow end users more options. Passwords are on the defaults/main.yml and require "" if using special characters.
 Inventory
 ---------
 
