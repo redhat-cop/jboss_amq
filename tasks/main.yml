@@ -4,7 +4,7 @@
   tags: [ "jboss:amq:requirements" ]
 
 - name: Install - Download AMQ from RHN
-  include_tasks: rhel_url.yml
+  include_tasks: rhn_url.yml
   when: transfer_method == 'csp-to-host' and jboss_amq_exists.stat.exists == false
 
 - name: Install - Copy AMQ from controller    
