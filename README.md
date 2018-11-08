@@ -25,9 +25,9 @@ This role requires the following vars in the inventory file
 
 ```
 amq-host1    amq_broker_name=broker-master
-amq-host2    amq_broker_name=broker-backup1    amq_broker_slave=True
-amq-host3    amq_broker_name=broker-backup2    amq_broker_slave=True
-amq-host4    amq_broker_name=broker-backup3    amq_broker_slave=True
+amq-host2    amq_broker_name=broker-backup1    amq_broker_replicate=True
+amq-host3    amq_broker_name=broker-backup2    amq_broker_replicate=True
+amq-host4    amq_broker_name=broker-backup3    amq_broker_replicate=True
 ```
 
 Example Playbooks
