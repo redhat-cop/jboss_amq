@@ -16,7 +16,7 @@
 
 - name: install - install AMQ
   unarchive:
-    src: "{{ jboss_amq_artifact_name }}"
+    src: "{{ amq_distribution }}"
     dest: "{{ amq_install_dir | dirname }}"
     owner: "{{ amq_user }}"
     group: "{{ amq_group }}"

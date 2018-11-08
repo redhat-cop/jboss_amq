@@ -69,12 +69,12 @@
       - "{{ amq_broker_options | join(' ') }}"
       - "--data {{ amq_broker_data_dir }}"
 
-- name: configure - create-broker - designate as slave
+- name: configure - create-broker - designate as replicated node
   set_fact:
     amq_broker_options:
       - "{{ amq_broker_options | join(' ') }}"
       - "--slave"
-  when: amq_broker_slave
+  when: amq_broker_replicate
 
 - name: configure - create-broker - enable replication
   set_fact:
