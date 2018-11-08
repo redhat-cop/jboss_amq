@@ -4,7 +4,8 @@
 transfer_method:  copy-from-contoller
 amq_version: 7.2.0
 jboss_amq_artifact_name: amq-broker-{{ amq_version }}-bin.zip
-amq_distribution: "/mnt/downloads/rh/amq/{{ jboss_amq_artifact_name }}"
+#amq_distribution: "/mnt/downloads/rh/amq/{{ jboss_amq_artifact_name }}"
+amq_distribution: "{{ jboss_amq_artifact_name }}"
 jboss_amq_artifact_source: https://access.redhat.com/jbossnetwork/restricted/softwareDownload.html?softwareId=58991
 amq_root_dir: /opt/jboss/amq
 amq_install_dir: "{{ amq_root_dir }}/install/amq-broker-{{ amq_version }}"
@@ -46,13 +47,13 @@ amq_broker_roles:
       - send
 
 # Clustering
-amq_broker_clustered: False
+amq_broker_clustered: True
 amq_broker_cluster_user: amq
 amq_broker_cluster_password: "amq"
 amq_broker_cluster_maxhops: 0
 amq_broker_cluster_load_balancing_policy: ON_DEMAND
 amq_broker_cluster_discovery: False
-amq_broker_slave: False
+amq_broker_replicate: False
 amq_broker_replicated: False
 
 ## Shared Storage
