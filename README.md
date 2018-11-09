@@ -15,14 +15,27 @@ Dependencies
 - ansible 2.5
 - java
 - unzip
+- jmespath
 
-Our playbooks provide these dependencies in a [common role](https://github.com/redhat-cop/ansible-middleware-playbooks/tree/master/roles/common), but this there is no explicitly ansible dependency to allow end users more options.
+Our playbooks provide these dependencies in a [common role](https://github.com/redhat-cop/ansible-middleware-playbooks/tree/master/roles/common), but this there is no explicitly ansible dependency to allow end users more options. Passwords are on the defaults/main.yml and require "" if using special characters.
+Inventory
+---------
+
+This role requires the following vars in the inventory file
+
+```
+amq-host1    amq_broker_name=broker-master
+amq-host2    amq_broker_name=broker-backup1    amq_broker_replicate=True
+amq-host3    amq_broker_name=broker-backup2    amq_broker_replicate=True
+amq-host4    amq_broker_name=broker-backup3    amq_broker_replicate=True
+```
 
 Example Playbooks
 ----------------
 
-- [JBoss AMQ 7.0 on RHEL 7](https://github.com/redhat-cop/ansible-middleware-playbooks/blob/master/amq7.0-rhel7.yml)
+- [JBoss AMQ 7.2 on RHEL 7](https://github.com/redhat-cop/ansible-middleware-playbooks/blob/master/amq7.2-rhel7.yml)
 
+Requirements
 License
 -------
 

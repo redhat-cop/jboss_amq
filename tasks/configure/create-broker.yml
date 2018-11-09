@@ -69,12 +69,12 @@
       - "{{ amq_broker_options | join(' ') }}"
       - "--data {{ amq_broker_data_dir }}"
 
-- name: configure - create-broker - designate as slave
+- name: configure - create-broker - designate as replicated node
   set_fact:
     amq_broker_options:
       - "{{ amq_broker_options | join(' ') }}"
       - "--slave"
-  when: amq_broker_slave
+  when: amq_broker_replicate
 
 - name: configure - create-broker - enable replication
   set_fact:
@@ -110,6 +110,13 @@
       - "{{ amq_broker_options | join(' ') }}"
       - "--no-mqtt-acceptor"
   when: amq_broker_disable_mqtt_protocol
+
+- name: configure - nio sets the journal as nio
+  set_fact:
+    amq_broker_options:
+    - "{{ amq_broker_options | join(' ') }}"
+    - "--nio"
+  when: amq_broker_nio
 
 - name: configure - create-broker - disable STOMP
   set_fact:
@@ -147,3 +154,5 @@
   args:
     creates: "{{ amq_broker_dir }}/{{ amq_broker_name }}"
   register: broker_created
+  become: True
+  become_user: jboss

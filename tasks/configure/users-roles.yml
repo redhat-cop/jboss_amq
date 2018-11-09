@@ -1,10 +1,12 @@
 ---
+
 - name: configure - users-roles - create additional messaging users
   shell: >
     {{ amq_broker_dir }}/{{ amq_broker_name }}/bin/artemis user add
     --user {{ item.name }}
     --password {{ item.password }}
     --role {{ item.role }}
+  changed_when: False
   with_items:
     - "{{ amq_broker_users }}"
 
@@ -18,5 +20,6 @@
       conf: urn:activemq
       core: urn:activemq:core
     pretty_print: yes
+  changed_when: False
   with_items:
     - "{{ amq_broker_roles }}"
