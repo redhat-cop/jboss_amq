@@ -1,0 +1,25 @@
+image: centos/systemd
+before_script:
+  - python --version
+  - yum install epel-release -y
+  - yum install python-pip gcc python-devel -y
+  - pip install virtualenv
+  - virtualenv ansible
+  - source ansible/bin/activate
+
+
+molecule:
+  stage: test
+  #tags:
+  #  - pip36
+  #  - docker
+
+  script:
+    - python --version
+    - pip install ansible molecule docker
+    - yum install epel-release -y
+    - yum install docker -y 
+    - ansible --version
+    - molecule --version
+    - molecule test 
+

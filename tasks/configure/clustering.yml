@@ -1,12 +1,4 @@
 ---
-- name: configure - clustering - ensure shared storage directory exists
-  file:
-    path: "{{ amq_broker_data_dir }}"
-    owner: "{{ amq_user }}"
-    group: "{{ amq_group }}"
-    state: directory
-  when: amq_broker_shared_storage
-  become_user: root
 
 - name: configure - clustering - retrieve existing static connectors
   xml:

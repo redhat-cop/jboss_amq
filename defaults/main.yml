@@ -1,9 +1,12 @@
 ---
 # Fundamentals
-amq_version: 7.1.0
+# usually this is set at the playbook level
+transfer_method:  copy-from-contoller
+amq_version: 7.2.0
 jboss_amq_artifact_name: amq-broker-{{ amq_version }}-bin.zip
-amq_distribution: "/mnt/downloads/rh/amq/{{ jboss_amq_artifact_name }}"
-jboss_amq_artifact_source: https://access.redhat.com/jbossnetwork/restricted/softwareDownload.html?softwareId=56531
+#amq_distribution: "/mnt/downloads/rh/amq/{{ jboss_amq_artifact_name }}"
+amq_distribution: "{{ jboss_amq_artifact_name }}"
+jboss_amq_artifact_source: https://access.redhat.com/jbossnetwork/restricted/softwareDownload.html?softwareId=58991
 amq_root_dir: /opt/jboss/amq
 amq_install_dir: "{{ amq_root_dir }}/install/amq-broker-{{ amq_version }}"
 amq_broker_dir: "{{ amq_root_dir }}/brokers"
@@ -21,7 +24,7 @@ amq_broker_admin:
 # Messaging users
 amq_broker_users:
   - name: jboss
-    password: jboss
+    password: "jboss"
     role: users
 
 # Messaging roles
@@ -44,19 +47,24 @@ amq_broker_roles:
       - send
 
 # Clustering
-amq_broker_clustered: False
+amq_broker_clustered: True
 amq_broker_cluster_user: amq
-amq_broker_cluster_password: amq
+amq_broker_cluster_password: "amq"
 amq_broker_cluster_maxhops: 0
 amq_broker_cluster_load_balancing_policy: ON_DEMAND
 amq_broker_cluster_discovery: False
-amq_broker_slave: False
+amq_broker_replicate: False
 amq_broker_replicated: False
+
+## Shared Storage
 amq_broker_shared_storage: False
 
 # Queues
 amq_broker_disable_destination_autocreate: True
 amq_broker_queues: queue.in,queue.out
+
+# Nio option
+amq_broker_nio: True
 
 # TLS
 amq_broker_tls: False
@@ -64,7 +72,10 @@ amq_broker_tls_keystore:
 amq_broker_tls_keystore_password: 
 amq_broker_tls_keystore_dest: "{{ amq_broker_dir }}/{{ amq_broker_name }}/etc/identity.ks"
 
-# Mutual authentication (requres TLS)
+# Patch AMQ
+amq_broker_patch: False
+
+# Mutual authentication (requires TLS)
 amq_broker_tls_mutual_authentication: False
 amq_broker_tls_truststore: 
 amq_broker_tls_truststore_password: 
@@ -89,5 +100,3 @@ amq_broker_ports:
   mqtt:
     port: 1833
 
-# ussually this is set at the playbook level
-#transfer_method: # csp-to-host | copy-from-contoller | url

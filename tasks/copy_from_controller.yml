@@ -1,0 +1,13 @@
+---
+  
+  - name: install - copy JBoss AMQ
+    copy:
+      src: "{{ jboss_amq_artifact_name }}"
+      dest: "{{ jboss_amq_artifact_tmp_dest }}"
+      remote_src: yes
+  
+  - name: install - set Location for Copy of JBoss AMQ
+    set_fact:
+      amq_distribution: "{{ jboss_amq_artifact_tmp_dest }}"
+      amq_remote_src: yes
+
