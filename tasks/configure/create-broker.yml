@@ -114,8 +114,8 @@
 - name: configure - nio sets the journal as nio
   set_fact:
     amq_broker_options:
-    - "{{ amq_broker_options | join(' ') }}"
-    - "--nio"
+      - "{{ amq_broker_options | join(' ') }}"
+      - "--nio"
   when: amq_broker_nio
 
 - name: configure - create-broker - disable STOMP

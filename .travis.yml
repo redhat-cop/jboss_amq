@@ -1,25 +1,32 @@
-sudo: required
+---
+
 language: python
 python:
   - "2.7"
+
+cache:
+  directories:
+    - $HOME/.cache/pip
+
 env:
   global:
     - ANSIBLE_HOST_KEY_CHECKING=False
+    - PIP_DOWNLOAD_CACHE=$HOME/.cache/pip
 
 before_install:
   - sudo apt-get update -qq
-  #- sudo apt-get install -y -o Dpkg::Options::="--force-confnew" docker-engine
 
 install:
-  - sudo pip install ansible==2.4
-  - sudo pip install docker-py
-  - sudo pip install six --upgrade
-  - sudo apt-get install -y sshpass
-  - ansible-galaxy install -r tests/requirements.yml -p tests/roles
+  - pip install -U pip
+  - pip install ansible==2.6 ansible-lint yamllint flake8 molecule docker jmespath "pytest<3.10"
 
-services:
-  - docker
-
+# command to run tests
 script:
-  - ansible-playbook -i tests/inventory tests/syntax-check.yml --syntax-check
-#  - ansible-playbook -i tests/inventory tests/docker-centos-eap-url.yml
+  - |
+    if $TRAVIS_SECURE_ENV_VARS; then
+      molecule test
+    else
+      molecule dependency
+      molecule lint
+      molecule syntax
+    fi;

@@ -1,5 +1,10 @@
 ---
 - name: Converge
   hosts: all
-  roles:
-    - role: jboss_amq
+  tasks:
+    - name: Common Role
+      include_role:
+        name: "redhat-cop.jboss_common"
+    - name: JBoss AMQ Role
+      include_role:
+        name: "../../../"

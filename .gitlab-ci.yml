@@ -1,3 +1,5 @@
+---
+
 image: centos/systemd
 before_script:
   - python --version
@@ -18,8 +20,7 @@ molecule:
     - python --version
     - pip install ansible molecule docker
     - yum install epel-release -y
-    - yum install docker -y 
+    - yum install docker -y
     - ansible --version
     - molecule --version
-    - molecule test 
-
+    - molecule test
