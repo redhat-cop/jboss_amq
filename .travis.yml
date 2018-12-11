@@ -23,6 +23,3 @@ services:
 script:
   - ansible-playbook -i tests/inventory tests/syntax-check.yml --syntax-check
 #  - ansible-playbook -i tests/inventory tests/docker-centos-eap-url.yml
-
-notifications:
-  slack: redhat:GhPEcNzYddt4Pf9OJW2wcyCK
