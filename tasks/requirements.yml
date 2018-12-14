@@ -1,31 +1,33 @@
 ---
 
-  - name: install - install packages
-    yum:
-      name: "{{ item }}"
-      state: latest
-    with_items:
-      - libaio
-    become_user: root
-                    
-  - name: Set AMQ Artifact Facts
-    set_fact:
-      jboss_amq_artifact_tmp_dest: "{{ '/tmp/' + jboss_amq_artifact_name }}"
+- name: install - install packages
+  yum:
+    name: "{{ item }}"
+  with_items:
+    - libaio
+  become_user: root
+  become: true
 
-  - name: install - create AMQ platform group
-    group:
-      name: "{{ amq_group }}"
-      state: present
-    become_user: root
+- name: Set AMQ Artifact Facts
+  set_fact:
+    jboss_amq_artifact_tmp_dest: "{{ '/tmp/' + jboss_amq_artifact_name }}"
 
-  - name: install - create AMQ platform user
-    user:
-      name: "{{ amq_user }}"
-      group: "{{ amq_group }}"
-      state: present
-    become_user: root
+- name: install - create AMQ platform group
+  group:
+    name: "{{ amq_group }}"
+    state: present
+  become_user: root
+  become: true
 
-  - name: install - check Existence of AMQ
-    stat:
-      path: "{{ amq_install_dir }}"
-    register: jboss_amq_exists
+- name: install - create AMQ platform user
+  user:
+    name: "{{ amq_user }}"
+    group: "{{ amq_group }}"
+    state: present
+  become_user: root
+  become: true
+
+- name: install - check Existence of AMQ
+  stat:
+    path: "{{ amq_install_dir }}"
+  register: jboss_amq_exists

@@ -1,7 +1,7 @@
 ---
 # Fundamentals
 # usually this is set at the playbook level
-transfer_method:  copy-from-contoller
+transfer_method: copy-from-contoller
 amq_version: 7.2.0
 jboss_amq_artifact_name: amq-broker-{{ amq_version }}-bin.zip
 #amq_distribution: "/mnt/downloads/rh/amq/{{ jboss_amq_artifact_name }}"
@@ -68,8 +68,8 @@ amq_broker_nio: True
 
 # TLS
 amq_broker_tls: False
-amq_broker_tls_keystore: 
-amq_broker_tls_keystore_password: 
+amq_broker_tls_keystore:
+amq_broker_tls_keystore_password:
 amq_broker_tls_keystore_dest: "{{ amq_broker_dir }}/{{ amq_broker_name }}/etc/identity.ks"
 
 # Patch AMQ
@@ -77,8 +77,8 @@ amq_broker_patch: False
 
 # Mutual authentication (requires TLS)
 amq_broker_tls_mutual_authentication: False
-amq_broker_tls_truststore: 
-amq_broker_tls_truststore_password: 
+amq_broker_tls_truststore:
+amq_broker_tls_truststore_password:
 amq_broker_tls_truststore_dest: "{{ amq_broker_dir }}/{{ amq_broker_name }}/etc/trust.ks"
 
 # Protocol disablement
@@ -99,4 +99,3 @@ amq_broker_ports:
     port: 5445
   mqtt:
     port: 1833
-

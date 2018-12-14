@@ -8,6 +8,7 @@
     owner: "{{ amq_user }}"
     group: "{{ amq_group }}"
   become_user: root
+  become: true
 
 - name: install - check Existence of AMQ
   stat:
