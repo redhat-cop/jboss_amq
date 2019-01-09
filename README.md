@@ -1,4 +1,4 @@
-Ansible JBoss AMQ Role [![Build Status](https://travis-ci.org/redhat-cop/jboss_amq.svg)](https://travis-ci.org/rhtconsulting/jboss_amq)
+Ansible JBoss AMQ Role [![Build Status](https://travis-ci.org/redhat-cop/jboss_amq.svg)](https://travis-ci.org/redhat-cop/jboss_amq)
 =================
 
 A role to install JBoss AMQ on RHEL7. Intended to be used with [JBoss Middleware Playbooks](https://github.com/redhat-cop/ansible-middleware-playbooks)
