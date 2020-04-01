@@ -1,7 +1,7 @@
 ---
 
 - block:
-  - name: Async Download JBoss AMQ from Red Hat Customer Portal
+  - name: Async Download Red Hat AMQ from Red Hat Customer Portal
     redhat_csp_download:
       url: "{{ jboss_amq_artifact_source }}"
       dest: "{{ jboss_amq_artifact_tmp_dest }}"
@@ -10,13 +10,13 @@
     async: 7200
     poll: 0
     register: jboss_amq_download
-  - name: 'Check On JBoss AMQ Download Completion'
+  - name: 'Check On Red Hat AMQ Download Completion'
     async_status: jid={{ jboss_amq_download.ansible_job_id }}
     register: job_result3
     until: job_result3.finished
     retries: 600
     delay: 10
-  - name: Set Location for Copy of JBoss AMQ
+  - name: Set Location for Copy of Red Hat AMQ
     set_fact:
       amq_distribution: "{{ jboss_amq_artifact_tmp_dest }}"
       amq_remote_src: yes

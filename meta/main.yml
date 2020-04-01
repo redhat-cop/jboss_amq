@@ -1,7 +1,7 @@
 ---
 galaxy_info:
   author: Red Hat Consulting
-  description: Role for Red Hat JBoss Enterprise AMQ
+  description: Role for Red Hat AMQ
   company: Red Hat
   license: license (Apache)
   min_ansible_version: 2.0.2.0
@@ -15,4 +15,4 @@ galaxy_info:
     - jboss
     - amq
 dependencies:
-  - {role: sabre1041.redhat-csp-download}
+  - { role: sabre1041.redhat-csp-download }
