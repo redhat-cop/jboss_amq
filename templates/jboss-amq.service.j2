@@ -1,13 +1,22 @@
 [Unit]
-Description = JBoss Active MQ (AMQ)
-After = network.target
+Description = Red Hat AMQ - {{ amq_broker_name }}
+After = syslog.target network.target
 
 [Service]
 ExecStart = {{ amq_broker_dir }}/{{ amq_broker_name }}/bin/artemis-service start
-ExecStop = {{ amq_broker_dir}}/{{amq_broker_name}}/bin/artemis-service stop
-Type=forking
-User = {{ amq_user }}
+ExecStop  = {{ amq_broker_dir}}/{{amq_broker_name}}/bin/artemis-service stop
+
+Type = forking
+
+User  = {{ amq_user }}
 Group = {{ amq_group }}
+
+SuccessExitStatus = 0 143
+
+RestartSec = 60
+Restart = on-failure
+
+LimitNOFILE=102642
 
 [Install]
 WantedBy = multi-user.target
