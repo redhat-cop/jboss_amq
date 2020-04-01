@@ -2,18 +2,17 @@
 # Fundamentals
 # usually this is set at the playbook level
 transfer_method: copy-from-contoller
-amq_version: 7.2.0
+amq_version: 7.6.0
 jboss_amq_artifact_name: amq-broker-{{ amq_version }}-bin.zip
-#amq_distribution: "/mnt/downloads/rh/amq/{{ jboss_amq_artifact_name }}"
 amq_distribution: "{{ jboss_amq_artifact_name }}"
-jboss_amq_artifact_source: https://access.redhat.com/jbossnetwork/restricted/softwareDownload.html?softwareId=58991
+jboss_amq_artifact_source: https://access.redhat.com/jbossnetwork/restricted/softwareDownload.html?softwareId=79671
 amq_root_dir: /opt/jboss/amq
 amq_install_dir: "{{ amq_root_dir }}/install/amq-broker-{{ amq_version }}"
 amq_broker_dir: "{{ amq_root_dir }}/brokers"
 amq_user: jboss
 amq_group: jboss
 amq_broker_name: broker
-amq_broker_data_dir: data
+amq_broker_data_dir: "{{ amq_root_dir }}/data"
 
 # Primary admin user and role with which the broker is created
 amq_broker_admin:
@@ -50,21 +49,25 @@ amq_broker_roles:
 amq_broker_clustered: True
 amq_broker_cluster_user: amq
 amq_broker_cluster_password: "amq"
-amq_broker_cluster_maxhops: 0
+amq_broker_cluster_maxhops: 1
 amq_broker_cluster_load_balancing_policy: ON_DEMAND
-amq_broker_cluster_discovery: False
+amq_broker_cluster_discovery: True
 amq_broker_replicate: False
 amq_broker_replicated: False
 
 ## Shared Storage
 amq_broker_shared_storage: False
 
+## Ports
+amq_broker_ports_offset_enabled: False
+amq_broker_ports_offset: 0
+
 # Queues
 amq_broker_disable_destination_autocreate: True
 amq_broker_queues: queue.in,queue.out
 
-# Nio option
-amq_broker_nio: True
+# NIO option
+amq_broker_nio: False
 
 # TLS
 amq_broker_tls: False
@@ -90,12 +93,12 @@ amq_broker_disable_stomp_protocol: False
 # Port assignments
 amq_broker_ports:
   artemis:
-    port: 61616
+    port: "{{ (61616|int + amq_broker_ports_offset|int)|abs }}"
   amqp:
-    port: 5672
+    port: "{{ (5672|int + amq_broker_ports_offset|int)|abs }}"
   stomp:
-    port: 61613
+    port: "{{ (61613|int + amq_broker_ports_offset|int)|abs }}"
   hornetq:
-    port: 5445
+    port: "{{ (5445|int + amq_broker_ports_offset|int)|abs }}"
   mqtt:
-    port: 1833
+    port: "{{ (1833|int + amq_broker_ports_offset|int)|abs }}"

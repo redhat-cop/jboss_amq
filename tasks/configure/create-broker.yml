@@ -3,13 +3,13 @@
   set_fact:
     amq_broker_cluster_nodes: >
       {{ amq_broker_cluster_nodes | default( [] ) + [
-        {
-          "name": hostvars[item].amq_broker_name,
-          "address": item,
-          "inventory_host": item,
-          "value": "tcp://" + item + ":61616"
-        }
-      ] }}
+           {
+             "name": amq_broker_name,
+             "address": item,
+             "inventory_host": item,
+             "value": "tcp://" + item + ":" + (((61616|int + amq_broker_ports_offset|int)|abs)|string)
+           }
+         ] }}
   with_items: "{{ ansible_play_batch }}"
 
 - name: configure - create-broker - prepare broker creation options
@@ -90,6 +90,13 @@
       - "--shared-store"
   when: amq_broker_shared_storage
 
+- name: configure - create-broker - set up port offset
+  set_fact:
+    amq_broker_options:
+      - "{{ amq_broker_options | join(' ') }}"
+      - "--port-offset {{ (0|int + amq_broker_ports_offset|int)|abs }}"
+  when: amq_broker_ports_offset_enabled
+
 - name: configure - create-broker - disable AMQP protocol
   set_fact:
     amq_broker_options:
@@ -111,19 +118,19 @@
       - "--no-mqtt-acceptor"
   when: amq_broker_disable_mqtt_protocol
 
-- name: configure - nio sets the journal as nio
-  set_fact:
-    amq_broker_options:
-      - "{{ amq_broker_options | join(' ') }}"
-      - "--nio"
-  when: amq_broker_nio
-
 - name: configure - create-broker - disable STOMP
   set_fact:
     amq_broker_options:
       - "{{ amq_broker_options | join(' ') }}"
       - "--no-stomp-acceptor"
   when: amq_broker_disable_stomp_protocol
+
+- name: configure - nio sets the journal as nio
+  set_fact:
+    amq_broker_options:
+      - "{{ amq_broker_options | join(' ') }}"
+      - "--nio"
+  when: amq_broker_nio
 
 - name: configure - create-broker - enable TLS for web UI
   set_fact:
@@ -142,7 +149,6 @@
       - "--use-client-auth"
   when: amq_broker_tls and amq_broker_tls_mutual_authentication and amq_broker_tls_truststore and amq_broker_tls_truststore_password
 
-# THIS SHOULD ALWAYS BE PERFORMED PRIOR TO CREATING THE BROKER
 - name: configure - create-broker - finalize broker creation options
   set_fact:
     amq_broker_options: "{{ amq_broker_options | join(' ') }}"
