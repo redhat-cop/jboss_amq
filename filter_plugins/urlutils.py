@@ -1,18 +1,18 @@
 from __future__ import (absolute_import, division, print_function)
 __metaclass__ = type
 
-from urlparse import parse_qs, urljoin
+from urllib.parse import parse_qs, urljoin
 
 def parse_url_query_string(query_string):
     """returns a dictionary of the parsed elements of a URL query string component"""
 
     return dict( (k, v if len(v) > 1 else v[0] )
-        for k, v in parse_qs(query_string).iteritems() )
+        for k, v in parse_qs(query_string).items() )
 
 
 def query_string(query_dict):
     """returns the URL query string representation of a dictionary"""
-    return ';'.join("%s=%s" % (key,val) for (key,val) in query_dict.iteritems())
+    return ';'.join("%s=%s" % (key,val) for (key,val) in query_dict.items())
 
 
 def urlsplit_split_query(urlsplit_value):
