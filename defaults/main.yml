@@ -3,28 +3,28 @@
 # usually this is set at the playbook level
 transfer_method: copy-from-contoller
 amq_version: 7.2.0
-jboss_amq_artifact_name: amq-broker-{{ amq_version }}-bin.zip
-#amq_distribution: "/mnt/downloads/rh/amq/{{ jboss_amq_artifact_name }}"
-amq_distribution: "{{ jboss_amq_artifact_name }}"
-jboss_amq_artifact_source: https://access.redhat.com/jbossnetwork/restricted/softwareDownload.html?softwareId=58991
-amq_root_dir: /opt/jboss/amq
+amq_artifact_name: amq-broker-{{ amq_version }}-bin.zip
+#amq_distribution: "/mnt/downloads/rh/amq/{{ amq_artifact_name }}"
+amq_distribution: "{{ amq_artifact_name }}"
+amq_artifact_source: https://access.redhat.com/jbossnetwork/restricted/softwareDownload.html?softwareId=58991
+amq_root_dir: /opt/redhat/amq
 amq_install_dir: "{{ amq_root_dir }}/install/amq-broker-{{ amq_version }}"
 amq_broker_dir: "{{ amq_root_dir }}/brokers"
-amq_user: jboss
-amq_group: jboss
+amq_user: amq
+amq_group: amq
 amq_broker_name: broker
 amq_broker_data_dir: data
 
 # Primary admin user and role with which the broker is created
 amq_broker_admin:
-  name: amq
-  password: redhat
+  name: admin
+  password: admin_pass
   role: admins
 
 # Messaging users
 amq_broker_users:
-  - name: jboss
-    password: "jboss"
+  - name: client
+    password: client_pass
     role: users
 
 # Messaging roles

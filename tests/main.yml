@@ -1,5 +1,0 @@
----
-- include: docker-centos-amq-cfc.yml
-  tags: test_copy_from_controller
-- include: docker-centos-amq-csp.yml
-  tags: test_csp
