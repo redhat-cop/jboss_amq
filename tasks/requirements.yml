@@ -10,7 +10,7 @@
 
 - name: Set AMQ Artifact Facts
   set_fact:
-    amq_artifact_tmp_dest: "{{ '/tmp/' + amq_artifact_name }}"
+    jboss_amq_artifact_tmp_dest: "{{ '/tmp/' + jboss_amq_artifact_name }}"
 
 - name: install - create AMQ platform group
   group:
@@ -30,4 +30,4 @@
 - name: install - check Existence of AMQ
   stat:
     path: "{{ amq_install_dir }}"
-  register: amq_exists
+  register: jboss_amq_exists

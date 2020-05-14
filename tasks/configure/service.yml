@@ -1,8 +1,8 @@
 ---
 - name: configure - service - install service for broker
   template:
-    src: amq.service.j2
-    dest: /usr/lib/systemd/system/amq.service
+    src: jboss-amq.service.j2
+    dest: /usr/lib/systemd/system/jboss-amq.service
     owner: root
     group: root
     mode: 0644

@@ -1,30 +1,30 @@
 ---
 
 - include_tasks: requirements.yml
-  tags: ["amq:requirements"]
+  tags: ["jboss:amq:requirements"]
 
 - name: Install - Download AMQ from RHN
   include_tasks: rhn_url.yml
-  when: transfer_method == 'csp-to-host' and amq_exists.stat.exists == false
+  when: transfer_method == 'csp-to-host' and jboss_amq_exists.stat.exists == false
 
 - name: Install - Copy AMQ from controller
   include_tasks: copy_from_controller.yml
-  when: transfer_method == 'copy-from-controller' and amq_exists.stat.exists == false
+  when: transfer_method == 'copy-from-controller' and jboss_amq_exists.stat.exists == false
 
 - include_tasks: install.yml
-  tags: ["amq:install"]
+  tags: ["jboss:amq:install"]
   become: yes
   become_user: "{{ amq_user }}"
   become_method: sudo
 
 - include_tasks: configure.yml
-  tags: ["amq:configure"]
+  tags: ["jboss:amq:configure"]
   become: yes
   become_user: "{{ amq_user }}"
   become_method: sudo
 
 - include_tasks: patch.yml
-  tags: ["amq:patch"]
+  tags: ["jboss:amq:patch"]
   become: yes
   become_user: "{{ amq_user }}"
   become_method: sudo

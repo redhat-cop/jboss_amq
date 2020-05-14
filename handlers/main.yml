@@ -1,8 +1,8 @@
 ---
-# handlers file for amq
+# handlers file for jboss-amq
 - name: enable and start broker service
   systemd:
-    name: amq
+    name: jboss-amq
     enabled: yes
     state: restarted
     daemon_reload: yes

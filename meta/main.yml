@@ -1,0 +1,18 @@
+---
+galaxy_info:
+  author: Red Hat Consulting
+  description: Role for Red Hat JBoss Enterprise AMQ
+  company: Red Hat
+  license: license (Apache)
+  min_ansible_version: 2.0.2.0
+  platforms:
+    - name: EL
+      versions:
+        - 7
+        - 6
+  categories:
+    - java
+    - jboss
+    - amq
+dependencies:
+  - {role: sabre1041.redhat-csp-download}

@@ -13,7 +13,7 @@
 - name: install - check Existence of AMQ
   stat:
     path: "{{ amq_install_dir }}"
-  register: amq_exists
+  register: jboss_amq_exists
 
 - name: install - install AMQ
   unarchive:
