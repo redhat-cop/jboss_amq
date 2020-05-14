@@ -12,6 +12,7 @@ env:
   global:
     - ANSIBLE_HOST_KEY_CHECKING=False
     - PIP_DOWNLOAD_CACHE=$HOME/.cache/pip
+    - MOLECULE_ENV_FILE=.env.yml
 
 before_install:
   - sudo apt-get update -qq
