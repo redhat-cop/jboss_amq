@@ -1,7 +1,8 @@
 from __future__ import (absolute_import, division, print_function)
 __metaclass__ = type
 
-from urllib.parse import parse_qs, urljoin
+from urllib.parse import parse_qs
+
 
 def parse_url_query_string(query_string):
     """returns a dictionary of the parsed elements of a URL query string component"""
