@@ -4,7 +4,7 @@
   tasks:
     - name: Install Required Packages for Testing
       package:
-        name: 
+        name:
           - initscripts
           - sudo
         state: latest

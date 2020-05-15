@@ -6,10 +6,6 @@ dependency:
     force: true
 driver:
   name: podman
-#lint:
-#  name: yamllint
-#  options:
-#    config-file: tests/yamllint.yml
 platforms:
   - name: centos-systemd
     image: centos/systemd:latest
@@ -33,12 +29,6 @@ platforms:
     command: "/usr/sbin/init"
 provisioner:
   name: ansible
-#  lint:
-#    name: ansible-lint
-#    options:
-#      x:
-#        - 301
-#        - 305
   inventory:
     group_vars:
       all:
@@ -46,6 +36,11 @@ provisioner:
         rhn_username: ${RHN_USERNAME}
         rhn_password: ${RHN_PASSWORD}
         amq_broker_name: broker-master
+lint: |
+  set -e
+  yamllint .
+  ansible-lint
+  flake8
 scenario:
   test_sequence:
     - dependency
@@ -62,5 +57,3 @@ scenario:
     - destroy
 verifier:
   name: testinfra
-#  lint:
-#    name: flake8
