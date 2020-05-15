@@ -5,26 +5,27 @@ from urllib.parse import parse_qs
 
 
 def parse_url_query_string(query_string):
-    """returns a dictionary of the parsed elements of a URL query string component"""
-
-    return dict( (k, v if len(v) > 1 else v[0] )
-        for k, v in parse_qs(query_string).items() )
+    """returns a dictionary of the parsed elements of a
+    URL query string component"""
+    return dict((k, v if len(v) > 1 else v[0])
+                for k, v in parse_qs(query_string).items())
 
 
 def query_string(query_dict):
     """returns the URL query string representation of a dictionary"""
-    return ';'.join("%s=%s" % (key,val) for (key,val) in query_dict.items())
+    return ';'.join("%s=%s" % (key, val) for (key, val) in query_dict.items())
 
 
 def urlsplit_split_query(urlsplit_value):
-    """given the dictionary returned by the urlsplit filter parses the query key into a dictionary"""
+    """given the dictionary returned by the urlsplit filter parses
+    the query key into a dictionary"""
     urlsplit_value['query'] = parse_url_query_string(urlsplit_value['query'])
-
     return urlsplit_value
 
 
 def url_combine(split_url):
-    """composes a URL from a dictionary using the same keys as produced by the urlsplit filter"""
+    """composes a URL from a dictionary using the same keys
+    as produced by the urlsplit filter"""
     result = ""
 
     if split_url["scheme"]:
