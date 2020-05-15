@@ -5,15 +5,18 @@ dependency:
     role-file: tests/requirements.yml
     force: true
 driver:
-  name: docker
-lint:
-  name: yamllint
-  options:
-    config-file: tests/yamllint.yml
+  name: podman
+#lint:
+#  name: yamllint
+#  options:
+#    config-file: tests/yamllint.yml
 platforms:
   - name: centos-systemd
     image: centos/systemd:latest
+    pre_build_image: true
     privileged: True
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
     port_bindings:
       - 61616:61616
       - 5672:5672
@@ -30,12 +33,12 @@ platforms:
     command: "/usr/sbin/init"
 provisioner:
   name: ansible
-  lint:
-    name: ansible-lint
-    options:
-      x:
-        - 301
-        - 305
+#  lint:
+#    name: ansible-lint
+#    options:
+#      x:
+#        - 301
+#        - 305
   inventory:
     group_vars:
       all:
@@ -44,7 +47,6 @@ provisioner:
         rhn_password: ${RHN_PASSWORD}
         amq_broker_name: broker-master
 scenario:
-  name: default
   test_sequence:
     - dependency
     - lint
@@ -60,5 +62,5 @@ scenario:
     - destroy
 verifier:
   name: testinfra
-  lint:
-    name: flake8
+#  lint:
+#    name: flake8
