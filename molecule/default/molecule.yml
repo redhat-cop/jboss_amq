@@ -39,7 +39,7 @@ provisioner:
 lint: |
   set -e
   yamllint .
-  ansible-lint -x 105 --exclude tasks/rhn_url.yml -- exclude filter_plugins/urlutils.py
+  ansible-lint -x 105 --exclude tasks/rhn_url.yml --exclude filter_plugins/urlutils.py
   flake8
 scenario:
   test_sequence:
