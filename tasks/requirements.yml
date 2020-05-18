@@ -2,10 +2,10 @@
 
 - name: install - install packages
   yum:
-    name: "{{ item }}"
-  with_items:
-    - unzip
-    - libaio
+    name:
+      - unzip
+      - libaio
+    state: present
   become_user: root
   become: true
 

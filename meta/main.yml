@@ -10,9 +10,9 @@ galaxy_info:
       versions:
         - 7
         - 6
-  categories:
+  galaxy_tags:
     - java
     - jboss
     - amq
 dependencies:
-  - { role: sabre1041.redhat-csp-download }
+  - {role: sabre1041.redhat-csp-download}

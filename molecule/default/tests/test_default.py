@@ -19,7 +19,7 @@ def test_pkg(host, pkg):
 
 
 @pytest.mark.parametrize('service', [
-  'jboss-amq',
+  'jboss-amq-broker-master',
 ])
 def test_systemd(host, service):
     systemd_service = host.service(service)
