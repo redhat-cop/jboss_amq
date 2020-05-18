@@ -1,7 +1,10 @@
 from __future__ import (absolute_import, division, print_function)
 __metaclass__ = type
 
-from urllib.parse import parse_qs
+try:
+    from urllib.parse import parse_qs
+except ImportError:
+    from urlparse import parse_qs
 
 
 def parse_url_query_string(query_string):
