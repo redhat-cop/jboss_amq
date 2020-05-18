@@ -5,7 +5,7 @@ dependency:
     role-file: tests/requirements.yml
     force: true
 driver:
-  name: podman
+  name: docker
 platforms:
   - name: centos-systemd
     image: centos/systemd:latest

@@ -18,7 +18,7 @@ before_install:
 
 install:
   - pip install -U pip
-  - pip install ansible ansible-lint yamllint flake8 molecule podman jmespath "pytest<3.10" testinfra
+  - pip install ansible ansible-lint yamllint flake8 molecule docker jmespath "pytest<3.10" testinfra
 
 # command to run tests
 script:
