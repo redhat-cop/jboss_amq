@@ -1,6 +1,5 @@
 ---
 
-
 - name: install - ensure AMQ install directory exists
   file:
     path: "{{ amq_install_dir | dirname }}"

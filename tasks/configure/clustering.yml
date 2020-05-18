@@ -14,6 +14,7 @@
 - name: configure - clustering - extract connector values as list
   set_fact:
     connectors: "{{ connectors | json_query('matches[*].*') | json_query('[]') }}"
+  when: not amq_broker_cluster_discovery
 
 - name: configure - clustering - add static connectors
   xml:
@@ -28,7 +29,7 @@
     pretty_print: yes
   with_items:
     - "{{ amq_broker_cluster_nodes }}"
-  when: not amq_broker_cluster_discovery and not item.value | search(ansible_host) and not item.value in connectors
+  when: not amq_broker_cluster_discovery and not item.value is search(ansible_host) and not item.value in connectors
 
 - name: configure - clustering - configure static connectors
   xml:
@@ -41,7 +42,7 @@
     pretty_print: yes
   with_items:
     - "{{ amq_broker_cluster_nodes }}"
-  when: not amq_broker_cluster_discovery and not item.value | search(ansible_host)
+  when: not amq_broker_cluster_discovery and not item.value is search(ansible_host)
 
 - name: configure - clustering - remove all static cluster reference connectors
   xml:
@@ -78,7 +79,7 @@
     pretty_print: yes
   with_items:
     - "{{ amq_broker_cluster_nodes }}"
-  when: not amq_broker_cluster_discovery and not item.value | search(ansible_host)
+  when: not amq_broker_cluster_discovery and not item.value is search(ansible_host)
 
 - name: configure - clustering - remove cluster connection discovery group reference
   xml:
@@ -109,3 +110,15 @@
       conf: urn:activemq
       core: urn:activemq:core
   when: not amq_broker_cluster_discovery
+
+- name: configure - clustering - add messaging redelivery
+  xml:
+    path: "{{ amq_broker_dir }}/{{ amq_broker_name }}/etc/broker.xml"
+    xpath: /conf:configuration/core:core/core:address-settings/core:address-setting[@match='#']
+    input_type: xml
+    add_children: "<redistribution-delay>0</redistribution-delay>"
+    namespaces:
+      conf: urn:activemq
+      core: urn:activemq:core
+    pretty_print: yes
+  changed_when: False

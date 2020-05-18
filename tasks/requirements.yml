@@ -2,11 +2,30 @@
 
 - name: install - install packages
   yum:
-    name: "{{ item }}"
-  with_items:
-    - libaio
+    name:
+      - unzip
+      - libaio
+    state: present
   become_user: root
   become: true
+
+- name: install - Install JDK 8 on RHEL 7
+  yum:
+    name:
+      - java-1.8.0-openjdk-devel
+    state: present
+  become_user: root
+  become: true
+  when: ansible_os_family == "RedHat" and ansible_distribution_major_version == "7"
+
+- name: install - Install JDK 11 on RHEL 8
+  yum:
+    name:
+      - java-11-openjdk-devel
+    state: present
+  become_user: root
+  become: true
+  when: ansible_os_family == "RedHat" and ansible_distribution_major_version == "8"
 
 - name: Set AMQ Artifact Facts
   set_fact:

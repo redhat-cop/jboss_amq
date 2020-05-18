@@ -1,3 +1,5 @@
+---
+
 - hosts: jboss_amq_centos_hosts
   gather_facts: false
   tasks:

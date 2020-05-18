@@ -28,14 +28,20 @@
   set_fact:
     acceptor_urls: "{{ acceptors_urls | json_query('matches[*].*') | json_query('[]') }}"
 
+- name: configure - ports - acceptors - parse URL's - init
+  set_fact:
+    acceptor_parsed_urls: []
+
 - name: configure - ports - acceptors - parse URL's
   set_fact:
     acceptor_parsed_urls: >
-      {{ acceptor_parsed_urls | default( [] ) + [
-        item | urlsplit | urlsplit_splitquery
-      ] }}
+      {{ acceptor_parsed_urls | default( [] ) + [ item | urlsplit | urlsplit_splitquery ] }}
   with_items:
     - "{{ acceptor_urls }}"
+
+- name: configure - ports - acceptors - combine - init
+  set_fact:
+    acceptors: {}
 
 - name: configure - ports - acceptors - combine
   set_fact:
