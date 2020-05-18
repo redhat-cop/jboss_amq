@@ -22,4 +22,11 @@ install:
 
 # command to run tests
 script:
-  - molecule test
+  - |
+    if $TRAVIS_SECURE_ENV_VARS; then
+      molecule test
+    else
+      molecule dependency
+      molecule lint
+      molecule syntax
+    fi;
