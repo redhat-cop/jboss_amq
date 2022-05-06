@@ -1,3 +1,7 @@
+# DEPRECATED - This repository is no longer maintained
+
+**Capabilities provided by this repository have migrated to the [ansible-middleware](https://github.com/ansible-middleware) project and specifically the [amq](https://github.com/ansible-middleware/amq) repository.**
+
 # Ansible Red Hat AMQ Role [![Build Status](https://travis-ci.org/redhat-cop/jboss_amq.svg)](https://travis-ci.org/redhat-cop/jboss_amq)
 
 A role to install Red Hat AMQ on CentOS, RHEL7 or RHEL8. Intended to be used with [JBoss Middleware Playbooks](https://github.com/redhat-cop/ansible-middleware-playbooks)
